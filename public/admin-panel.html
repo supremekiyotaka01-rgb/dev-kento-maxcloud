@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Administration — DEV KENTO AMATRIX</title>
+<style>
+body{margin:0;background:#10111a;color:#fff;font-family:Arial,sans-serif;padding:20px}
+main{max-width:650px;margin:auto}
+h1{font-size:25px}
+input,button{box-sizing:border-box;width:100%;padding:12px;margin:6px 0;border-radius:8px;font-size:16px}
+input{background:#1c1e2b;color:white;border:1px solid #555}
+button{background:#7357ff;color:white;border:0;font-weight:bold}
+.item{background:#1c1e2b;padding:12px;margin:10px 0;border-radius:10px;overflow-wrap:anywhere}
+.item a{color:#b8aaff}
+.item button{background:#b83249}
+#message{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<main>
+<h1>DEV KENTO AMATRIX</h1>
+<p>Panneau administrateur</p>
+<button id="logout">Se déconnecter</button>
+<h2>Ajouter un lien</h2>
+<form id="add">
+<input id="category" placeholder="Catégorie : WhatsApp, TikTok..." required>
+<input id="name" placeholder="Nom du lien" required>
+<input id="url" type="url" placeholder="https://..." required>
+<button type="submit">Ajouter le lien</button>
+</form>
+<h2>Liens enregistrés</h2>
+<div id="links">Chargement…</div>
+<p id="message" role="status"></p>
+</main>
+<script>
+const message=document.getElementById('message');
+async function api(url,options={}){
+ const r=await fetch(url,{credentials:'same-origin',...options});
+ const data=await r.json().catch(()=>({}));
+ if(r.status===401){location.href='/admin.html';throw new Error('Reconnecte-toi comme administrateur.');}
+ if(!r.ok)throw new Error(data.error||'Une erreur est survenue.');
+ return data;
+}
+async function loadLinks(){
+ try{
+  const links=await api('/api/links');
+  const box=document.getElementById('links');
+  box.replaceChildren();
+  if(!links.length){box.textContent='Aucun lien enregistré.';return;}
+  links.forEach(link=>{
+   const item=document.createElement('div');item.className='item';
+   const title=document.createElement('strong');title.textContent=link.name+' — '+link.category;
+   const br=document.createElement('br');
+   const a=document.createElement('a');a.href=link.url;a.textContent=link.url;a.target='_blank';a.rel='noopener noreferrer';
+   const del=document.createElement('button');del.textContent='Supprimer';
+   del.onclick=async()=>{
+    if(!confirm('Supprimer le lien « '+link.name+' » ?'))return;
+    try{await api('/api/links/'+encodeURIComponent(link.id),{method:'DELETE'});message.textContent='Lien supprimé.';loadLinks();}
+    catch(e){message.textContent=e.message;}
+   };
+   item.append(title,br,a,del);box.append(item);
+  });
+ }catch(e){document.getElementById('links').textContent=e.message;}
+}
+document.getElementById('add').addEventListener('submit',async e=>{
+ e.preventDefault();message.textContent='Enregistrement…';
+ try{
+  await api('/api/links',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+   category:document.getElementById('category').value,
+   name:document.getElementById('name').value,
+   url:document.getElementById('url').value
+  })});
+  e.target.reset();message.textContent='Lien ajouté.';await loadLinks();
+ }catch(err){message.textContent=err.message;}
+});
+document.getElementById('logout').onclick=async()=>{
+ try{await api('/api/admin/logout',{method:'POST'});}catch(e){}
+ location.href='/admin.html';
+};
+(async()=>{
+ try{
+  const s=await api('/api/admin/me');
+  if(!s.authenticated){location.href='/admin.html';return;}
+  loadLinks();
+ }catch(e){message.textContent=e.message;}
+})();
+</script>
+</body>
+</html>

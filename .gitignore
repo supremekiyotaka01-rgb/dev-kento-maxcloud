@@ -1,0 +1,9 @@
+node_modules/
+.env
+*.tar.gz
+.git/
+
+server.before-*.js
+server.js.backup-*
+public/index.*backup*.html
+public/index.before-*.html

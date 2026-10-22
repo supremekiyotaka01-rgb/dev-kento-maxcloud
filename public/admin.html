@@ -1,0 +1,46 @@
+cd ~/maxcloud && cat > public/admin.html <<'EOF'
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — DEV KENTO AMATRIX</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#10111a;color:#fff;min-height:100vh;display:grid;place-items:center}
+main{width:min(88%,360px);background:#1c1e2b;padding:26px;border-radius:18px;box-sizing:border-box}
+h1{font-size:23px;text-align:center}
+p{color:#c4c6d4;text-align:center}
+input,button{box-sizing:border-box;width:100%;padding:13px;margin-top:12px;border-radius:9px;font-size:16px}
+input{background:#10111a;color:white;border:1px solid #45485c}
+button{border:0;background:#7357ff;color:white;font-weight:bold}
+#message{overflow-wrap:anywhere;font-size:14px}
+</style>
+</head>
+<body>
+<main>
+<h1>DEV KENTO AMATRIX</h1>
+<p>Connexion administrateur</p>
+<form id="login">
+<input id="password" type="password" placeholder="Mot de passe administrateur" autocomplete="current-password" required>
+<button type="submit">Se connecter</button>
+</form>
+<p id="message" role="status"></p>
+</main>
+<script>
+document.getElementById('login').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const message=document.getElementById('message');
+ message.textContent='Connexion en cours…';
+ try{
+  const r=await fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.getElementById('password').value})});
+  const data=await r.json();
+  if(!r.ok) throw new Error(data.error||'Connexion refusée');
+  location.href='/admin-panel.html';
+ }catch(err){message.textContent=err.message||'Erreur de connexion';}
+});
+</script>
+</body>
+</html>
+EOF
+cd ~/maxcloud && cp server.js server.before-admin-login.js && echo "Sauvegarde prête"
+

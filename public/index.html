@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#061326">
+<title>MaxCloud | AMATRIX</title>
+<style>
+:root{--bg:#061326;--panel:#0b1d36;--blue:#087cff;--cyan:#00e5ff;--text:#f1f7ff;--muted:#a7bfdc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:16px;background:#081a30;border-bottom:1px solid #16416a;position:sticky;top:0;z-index:2}
+.logo{width:52px;height:52px;border:2px solid var(--cyan);border-radius:50%;display:grid;place-items:center;color:var(--cyan);font-weight:bold;font-size:25px}
+.brand{flex:1}
+x
+.brand strong{display:block;font-size:19px}
+.brand small{color:var(--muted)}
+button{cursor:pointer;color:var(--text);background:#102b4c;border:1px solid #1765a0;border-radius:10px;padding:11px}
+main{max-width:1000px;margin:auto;padding:20px}
+.hero{padding:25px;border-radius:18px;background:linear-gradient(120deg,#082a58,#073f65,#101b40);border:1px solid #087cff}
+.hero h1{font-size:28px;margin-top:0}
+.hero span{color:var(--cyan)}
+.hero p{color:#d0e5ff;line-height:1.6}
+h2{font-size:20px;margin-top:28px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tile{background:var(--panel);padding:17px;border-radius:14px;border:1px solid #173d63;min-width:0}
+.tile .emoji{font-size:28px}
+.tile h3{margin:10px 0 6px}
+.tile p{color:var(--muted);font-size:13px;line-height:1.4}
+.tile button{width:100%}
+.storage{border-color:#1765a0}
+footer{text-align:center;color:var(--muted);padding:30px 15px;border-top:1px solid #173d63;margin-top:35px;font-size:13px}
+footer strong{color:var(--cyan)}
+#notice{color:var(--cyan);font-size:13px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero h1{font-size:36px}}
+</style>
+</head>
+<body>
+<header>
+  <img class="logo" src="/amatrix.jpg" alt="AMATRIX Developers Community">
+  <div class="brand">
+    <strong>AMATRIX <span style="color:#00e5ff">MaxCloud</span></strong>
+    <small>Créé par DEV KENTO AMATRIX</small>
+  </div>
+  <button onclick="window.location.href='/admin.html'">⋮</button>
+</header>
+<main>
+  <section class="hero">
+    <h1>Bienvenue sur <span>MaxCloud</span></h1>
+    <p>Tes liens, tes photos et tes vidéos, organisés au même endroit.</p>
+    <p>Une création de <strong>⃟DEV༗KENTO⃟ 𝐀𝐌𝐀𝐓𝐑𝐈𝐗</strong></p>
+  </section>
+
+  <h2>🌐 Réseaux sociaux et communautés</h2>
+  <section class="grid">
+    <article class="tile">
+      <div class="emoji">🟢</div><h3>WhatsApp</h3>
+      <p>Groupes, communautés et chaînes.</p>
+      <button onclick="showCategory('WhatsApp')">Voir les liens</button>
+    </article>
+    <article class="tile">
+      <div class="emoji">🔵</div><h3>Facebook</h3>
+      <p>Groupes, pages et publications.</p>
+      <button onclick="showCategory('Facebook')">Voir les liens</button>
+    </article>
+    <article class="tile">
+      <div class="emoji">🎵</div><h3>TikTok</h3>
+      <p>Vidéos et profils de créateurs.</p>
+      <button onclick="showCategory('TikTok')">Voir les liens</button>
+    </article>
+    <article class="tile">
+      <div class="emoji">📸</div><h3>Instagram</h3>
+      <p>Profils, publications et Reels.</p>
+      <button onclick="showCategory('Instagram')">Voir les liens</button>
+    </article>
+    <article class="tile">
+      <div class="emoji">👻</div><h3>Snapchat</h3>
+      <p>Profils et liens compatibles.</p>
+      <button onclick="showCategory('Snapchat')">Voir les liens</button>
+    </article>
+    <article class="tile">
+      <div class="emoji">🔗</div><h3>Mes autres liens</h3>
+      <p>Les autres adresses web à conserver.</p>
+      <button onclick="showCategory('Autres liens')">Voir les liens</button>
+    </article>
+  </section>
+
+  <h2>☁️ Mon espace de fichiers</h2>
+  <section class="grid">
+    <article class="tile storage">
+      <div class="emoji">🖼️</div><h3>Photos</h3>
+      <p>Un espace dédié à tes images.</p>
+      <button onclick="showCategory('Photos')">Ouvrir les photos</button>
+    </article>
+    <article class="tile storage">
+      <div class="emoji">🎬</div><h3>Vidéos</h3>
+      <p>Un espace dédié à tes vidéos.</p>
+      <button onclick="showCategory('Vidéos')">Ouvrir les vidéos</button>
+    </article>
+  </section>
+  <p id="notice">Bienvenue ! L'espace de stockage en ligne sera connecté dans une prochaine étape.</p>
+</main>
+<footer>
+  <p>© 2026 MaxCloud · Tous droits réservés</p>
+  <p>Créé avec passion par <strong>⃟DEV༗KENTO⃟ 𝐀𝐌𝐀𝐓𝐑𝐈𝐗</strong></p>
+  <p>AMATRIX DEVELOPERS COMMUNITY</p>
+</footer>
+<script>
+async function showCategory(name) {
+  const notice = document.getElementById('notice');
+
+  notice.innerHTML = `
+    <section style="padding:16px;text-align:left">
+      <h2 id="categoryTitle"></h2>
+      <form id="linkForm" style="display:grid;gap:10px;margin:15px 0">
+        <input id="linkName" type="text" placeholder="Nom du lien" required
+          style="padding:12px;border-radius:8px;border:1px solid #888">
+        <input id="linkUrl" type="url" placeholder="https://..." required
+          style="padding:12px;border-radius:8px;border:1px solid #888">
+        <button type="submit">＋ Enregistrer le lien</button>
+      </form>
+      <p id="linkMessage" role="status"></p>
+      <h3>Mes liens enregistrés</h3>
+      <div id="linkList"></div>
+    </section>`;
+
+  notice.querySelector('#categoryTitle').textContent = name;
+  const list = notice.querySelector('#linkList');
+  const message = notice.querySelector('#linkMessage');
+
+  async function loadLinks() {
+    list.replaceChildren();
+    try {
+      const response = await fetch('/api/links?category=' + encodeURIComponent(name));
+      if (!response.ok) throw new Error();
+      const links = await response.json();
+
+      if (!links.length) {
+        list.textContent = 'Aucun lien enregistré dans cette catégorie.';
+        return;
+      }
+
+      links.forEach(link => {
+        const item = document.createElement('div');
+        item.style.cssText = 'padding:12px;margin:10px 0;border:1px solid #888;border-radius:8px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap';
+
+        const anchor = document.createElement('a');
+        anchor.textContent = link.name;
+        anchor.href = link.url;
+        anchor.target = '_blank';
+        anchor.rel = 'noopener noreferrer';
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.textContent = 'Supprimer';
+        remove.addEventListener('click', async () => {
+          if (!confirm('Supprimer « ' + link.name + ' » ?')) return;
+          try {
+            const result = await fetch('/api/links/' + encodeURIComponent(link.id), {
+              method: 'DELETE'
+            });
+            if (!result.ok) throw new Error();
+            await loadLinks();
+            message.textContent = 'Lien supprimé.';
+          } catch {
+            message.textContent = 'Impossible de supprimer le lien.';
+          }
+        });
+
+        item.append(anchor, remove);
+        list.append(item);
+      });
+    } catch {
+      message.textContent = 'Erreur de chargement. Vérifie que le serveur fonctionne.';
+    }
+  }
+
+  notice.querySelector('#linkForm').addEventListener('submit', async event => {
+    event.preventDefault();
+    const linkName = notice.querySelector('#linkName').value.trim();
+    const linkUrl = notice.querySelector('#linkUrl').value.trim();
+    message.textContent = 'Enregistrement...';
+
+    try {
+      const response = await fetch('/api/links', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: name, name: linkName, url: linkUrl })
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Échec de l’enregistrement.');
+
+      notice.querySelector('#linkName').value = '';
+      notice.querySelector('#linkUrl').value = '';
+      message.textContent = 'Lien enregistré avec succès !';
+      await loadLinks();
+    } catch (error) {
+      message.textContent = error.message || 'Impossible de contacter le serveur.';
+    }
+  });
+
+  notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  await loadLinks();
+}
+</script>
+</body>
+</html>
+
